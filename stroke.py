@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
 
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -69,6 +72,23 @@ y = dataset['stroke']
 
 # Splitting data into training and testing data
 X_train, X_test, Y_train, Y_test = train_test_split(x, y, test_size=0.2, random_state=65)
+
+# Dimension reduction
+# Create scaler
+scaler = StandardScaler()
+# Create a PCA instance
+pca = PCA()
+# Create pipeline
+pipeline = make_pipeline(scaler, pca)
+# Fit the pipeline to samples
+pipeline.fit(X_train)
+# Plot the explained variances
+features = range(pca.n_components_)
+plt.bar(features, pca.explained_variance_)
+plt.xlabel('PCA feature')
+plt.ylabel('variance')
+plt.xticks(features)
+plt.show()
 
 # Logistic Regression
 model_Logistic = LogisticRegression(random_state=1)
